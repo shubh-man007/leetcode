@@ -6,16 +6,13 @@ class Solution(object):
         """
         
         buy = prices[0]
-        p = []
-        for i in range(1, len(prices)):
-            sell = prices[i]
-            profit = sell - buy
-            if profit > 0:
-                buy = buy
-            else:
-                buy = prices[i]
-            p.append(profit)
+        max_profit = 0
 
-        if len(p) > 0 and max(p) > 0:
-            return max(p)
-        return 0
+        for price in prices[1:]:
+            profit = price - buy
+            if profit > 0:
+                max_profit = max(max_profit, profit)
+            else:
+                buy = price
+
+        return max_profit
