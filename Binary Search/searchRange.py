@@ -5,22 +5,22 @@ class Solution(object):
         :type target: int
         :rtype: List[int]
         """
-        find = []
-        def binSearch(nums, low, high, target):
-            mid = int(low + (high - low)/2)
+        def binSearch(nums, low, high, target, findFirst):
             if low > high:
-                return -1, [-1, -1]
+                return -1
+            mid = int(low + (high - low)/2)
             if nums[mid] == target:
-                find.append(mid)
-                binSearch(nums, low, mid-1, target)
-                binSearch(nums, mid+1, high, target)
-                return mid, find
+                if findFirst:
+                    temp = binSearch(nums, low, mid - 1, target, findFirst)
+                    return mid if temp == -1 else temp
+                else:
+                    temp = binSearch(nums, mid + 1, high, target, findFirst)
+                    return mid if temp == -1 else temp
             elif nums[mid] > target:
-                high = mid - 1
-                return binSearch(nums, low, high, target)
+                return binSearch(nums, low, mid - 1, target, findFirst)
             else:
-                low = mid + 1
-                return binSearch(nums, low, high, target)
-            
-        _, res = binSearch(nums, 0, len(nums) - 1, target)
-        return [min(res), max(res)]
+                return binSearch(nums, mid + 1, high, target, findFirst)
+
+        left = binSearch(nums, 0, len(nums) - 1, target, True)
+        right = binSearch(nums, 0, len(nums) - 1, target, False)
+        return [left, right]
